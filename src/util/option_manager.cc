@@ -45,6 +45,7 @@
 #include "optim/bundle_adjustment.h"
 #include "ui/render_options.h"
 #include "util/misc.h"
+#include "util/random.h"
 #include "util/version.h"
 
 namespace config = boost::program_options;
@@ -75,6 +76,8 @@ OptionManager::OptionManager(bool add_project_options) {
   Reset();
 
   desc_->add_options()("help,h", "");
+
+  AddAndRegisterDefaultOption("random_seed", &kDefaultPRNGSeed);
 
   if (add_project_options) {
     desc_->add_options()("project_path", config::value<std::string>());
@@ -471,6 +474,9 @@ void OptionManager::AddMapperOptions() {
                               &mapper->ba_refine_principal_point);
   AddAndRegisterDefaultOption("Mapper.ba_refine_extra_params",
                               &mapper->ba_refine_extra_params);
+  AddAndRegisterDefaultOption(
+      "Mapper.ba_min_num_residuals_for_multi_threading",
+      &mapper->ba_min_num_residuals_for_multi_threading);
   AddAndRegisterDefaultOption("Mapper.ba_local_num_images",
                               &mapper->ba_local_num_images);
   AddAndRegisterDefaultOption("Mapper.ba_local_max_num_iterations",
